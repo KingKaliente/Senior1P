@@ -1,12 +1,11 @@
-print("You are off on your space mission! You've just taken off and left the Earth's atmosphere. Your team is ready for an adventure of a lifetime! The goal of this mission is to try to find life in the universe. As the captain - you now have an important choice. Where do you go?")
-userInput = input("Enter A or B. A) Head towards Mars B) Head into empty space")
+print("You've finally finished you're galatic adventure and finally head home to Earth. While exploring the universe, you find a single commonality. Potatoes. This gets you to wonder, do pigs prefer potatoes are carrots?")
+userInput = input("Enter A or B. A) Potatoes B) Carrots")
 
 if userInput == 'A':
-# Student 1 finishes this code
+     print("Filled with anticipation, you decide to test your theory. Ultimately, you discover that pigs do in fact, prefer potatoes albeit you started The Great Potato Famine.")
 
 elif userInput == 'B':
 # Student 2 finishes this code 
 
-else: 
+else:
      print("You entered something wrong - refresh and try again!")
-     print("A potato flew around the room")
