@@ -1,36 +1,35 @@
 extends CharacterBody2D
 
-
 var nerf_b = preload("res://nerf_b.tscn")
 
-var health = 100
+var health = 10
 const SPEED = 300.0
 const Bspeed = 800
 const JUMP_VELOCITY = -400.0
-const fireR = 0
+const fireR = 0.5
 var canF = true 
-
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 #var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _process(delta):
-		look_at(get_global_mouse_position())
+	Global.pos = self.position
+	
+	look_at(get_global_mouse_position())
 		
-		if Input.is_action_pressed("ui_shoot") and canF:
-			var instance = nerf_b
-			var spawn = instance.instantiate()
-			spawn.position = $Marker2D.get_global_position()
-			spawn.rotation_degrees = rotation_degrees
-			spawn.apply_impulse(Vector2(Bspeed, 0).rotated(rotation), Vector2(Bspeed, 0).rotated(rotation))
-			get_tree().get_root().add_child(spawn)
-			canF = false
-			await get_tree().create_timer(fireR).timeout
-			canF = true
+	if Input.is_action_pressed("ui_shoot") and canF:
+		var instance = nerf_b
+		var spawn = instance.instantiate()
+		spawn.position = $Marker2D.get_global_position()
+		spawn.rotation_degrees = rotation_degrees
+		spawn.apply_impulse(Vector2(Bspeed, 0).rotated(rotation), Vector2(Bspeed, 0).rotated(rotation))
+		get_tree().get_root().add_child(spawn)
+		canF = false
+		await get_tree().create_timer(fireR).timeout
+		canF = true
 
 	
 func _physics_process(delta):
-	update_health()
 	Global.charpos = self.position
 	if Input.is_action_pressed("ui_up"):
 		velocity.y = JUMP_VELOCITY
@@ -56,25 +55,11 @@ func _physics_process(delta):
 		if velocity.x < 0:
 			velocity.x += 100
 
+
 	move_and_slide()
 	
-func _unhandled_input(event):
-	pass
-
-
-func update_health():
-	var healthbar = $healthbar
-	healthbar.value = health
-	
-	if healthbar.value >= 100:
-		healthbar.visible = false
-	else:
-		healthbar.visible = true
-
-func _on_regen_timer_timeout():
-	if health < 100:
-		health = health + 10
-		if health > 100 :
-			health = 100
-	if health <= 0:
-		health = 0
+func attack():
+	health -= 2
+	print(health)
+		
+		
