@@ -2,6 +2,7 @@ extends Node2D
 
 var charpos
 var velocity = Vector2()
+var pos= Vector2()
 var BknockBack_dir = Vector2(0,0)
 var ELim = 10
 var Esd = 1
@@ -15,3 +16,4 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
+
