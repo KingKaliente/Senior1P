@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://yy4t38f3x357"]
+
+[ext_resource type="Script" path="res://E.gd" id="1_ids8p"]
+[ext_resource type="Texture2D" uid="uid://dhv580scnkjuj" path="res://Zombie Bug.png" id="2_rf6kc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rurwb"]
+size = Vector2(34, 39)
+
+[node name="E" type="Area2D"]
+script = ExtResource("1_ids8p")
+
+[node name="enemy" type="Sprite2D" parent="."]
+position = Vector2(0, -5.72205e-06)
+scale = Vector2(0.0470703, 0.0519531)
+texture = ExtResource("2_rf6kc")
+hframes = 2
+vframes = 3
+
+[node name="eS" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_rurwb")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -1,0 +1,125 @@
+[gd_scene load_steps=10 format=3 uid="uid://c8rg5fdaj81v2"]
+
+[ext_resource type="Script" path="res://Player.gd" id="1_jyqwy"]
+[ext_resource type="Texture2D" uid="uid://b1t4kwlc8s13y" path="res://PspriteWS.png" id="2_ebet1"]
+[ext_resource type="Script" path="res://AnimationPlayer.gd" id="2_no3m7"]
+[ext_resource type="Texture2D" uid="uid://0smt2aa41str" path="res://feetwalk.png" id="3_vfmhs"]
+
+[sub_resource type="Animation" id="Animation_c2lc1"]
+resource_name = "Bwalk"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [20, 21, 20]
+}
+
+[sub_resource type="Animation" id="Animation_ptp8a"]
+resource_name = "Pwalk"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Sprite2D2:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [15, 16, 17, 18, 18, 17, 16, 15, 14, 13, 12, 11, 10, 12, 13, 14, 15]
+}
+
+[sub_resource type="Animation" id="Animation_fsnpx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_br1gh"]
+_data = {
+"Bwalk": SubResource("Animation_c2lc1"),
+"Pwalk": SubResource("Animation_ptp8a"),
+"RESET": SubResource("Animation_fsnpx")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g6jmh"]
+radius = 77.0
+height = 190.0
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+position = Vector2(2, 4)
+script = ExtResource("1_jyqwy")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_ebet1")
+hframes = 5
+vframes = 5
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+show_behind_parent = true
+texture = ExtResource("3_vfmhs")
+hframes = 4
+vframes = 5
+frame = 15
+
+[node name="playerani" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Sprite2D")
+libraries = {
+"": SubResource("AnimationLibrary_br1gh")
+}
+script = ExtResource("2_no3m7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-11, 9)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_g6jmh")
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(120, 57)
+
+[node name="healthbar" type="ProgressBar" parent="."]
+modulate = Color(0, 0.686275, 0.0941176, 1)
+self_modulate = Color(0.0352941, 0.623529, 0, 1)
+offset_left = -112.0
+offset_top = 92.0
+offset_right = 314.0
+offset_bottom = 151.0
+scale = Vector2(0.5, 0.5)
+step = 1.0
+value = 100.0
+show_percentage = false
+
+[node name="regen_timer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="visibility_changed" from="Sprite2D2" to="." method="_on_sprite_2d_2_visibility_changed"]
+[connection signal="timeout" from="regen_timer" to="." method="_on_regen_timer_timeout"]
