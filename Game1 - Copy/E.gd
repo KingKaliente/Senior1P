@@ -1,25 +1,36 @@
-extends Area2D
-
-
-
+extends CharacterBody2D
 var eHP = 20
-func _ready():
-	pass
+var speed = 200
 
 
-func _process(delta):
+var player = preload("res://Player.tscn")
+
+@onready var nav_agent:= $NavigationAgent2D as NavigationAgent2D
+
+func _physics_process(delta: float) -> void:
+	var dir = to_local(nav_agent.get_next_path_position()).normalized()
+	velocity = dir * speed
+	move_and_slide()
 	
-	position = position.move_toward(Global.charpos, delta*100)
+func makepath() -> void:
+	nav_agent.target_position = Global.pos
+	
+func _process(delta):
+	position = position.move_toward(Global.charpos, delta*200)
 	if eHP == 0 or eHP < 0:
 		queue_free()
 		Global.Esd -= 1
 		Global.score += 10
 
-func _on_body_entered(body):
-	print("done")
-	if body.has_method("CE"):
-		body.CE()
-		eHP -= 5
-		print("hit")
+func hit():
+	eHP -= 5
+	
+func _on_area_2d_body_entered(body):
+	if body.has_method("attack"):
+		body.attack()
+	
+	pass
 	
 
+func _on_timer_timeout():
+	makepath()
